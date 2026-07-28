@@ -1,75 +1,94 @@
-# Write your solution here
+from string import ascii_uppercase
 #TODO: This long problem! It's still not done
 def run(execution_list:list):
-    for item in list:
+    variables_dict = {}
+    print_list = []
+    i = 0
 
-        pass
-    return 
+    for char in ascii_uppercase:
+        variables_dict[char] = 0
+
+    if len(execution_list) == 0:
+        return print_list
+
+    while True:
+        if i == len(execution_list):
+            break
+
+        if execution_list[i][:3] == "MOV":
+            if execution_list[i][6:] in variables_dict:
+                variables_dict[execution_list[i][4:5]] = variables_dict[execution_list[i][6:]]
+            else:
+                variables_dict[execution_list[i][4:5]] = int(execution_list[i][6:])
+
+        if execution_list[i][:5] == "PRINT":
+            if execution_list[i][6:] in variables_dict:
+                print_list.append(int(variables_dict[execution_list[i][6:]]))
+            else:
+                print_list.append(int(execution_list[i][6:]))
+
+        if execution_list[i][:3] == "ADD":
+            if execution_list[i][6:] in variables_dict:
+                variables_dict[execution_list[i][4:5]] += variables_dict[execution_list[i][6:]]
+            else:
+                variables_dict[execution_list[i][4:5]] += int(execution_list[i][6:])
+
+        if execution_list[i][:3] == "SUB":
+            if execution_list[i][6:] in variables_dict:
+                variables_dict[execution_list[i][4:5]] -= variables_dict[execution_list[i][6:]]
+            else:
+                variables_dict[execution_list[i][4:5]] -= int(execution_list[i][6:])
+
+        if execution_list[i][:3] == "MUL":
+            if execution_list[i][6:] in variables_dict:
+                variables_dict[execution_list[i][4:5]] *= variables_dict[execution_list[i][6:]]
+            else:
+                variables_dict[execution_list[i][4:5]] *= int(execution_list[i][6:])
+
+        if execution_list[i][:4] == "JUMP":
+            jump_list = execution_list.index(execution_list[i][5:]+":")
+            i = jump_list
+
+        if execution_list[i][:2] == "IF":
+            special_function = execution_list[i][5:7]
+            jump_start_index = execution_list[i].index("JUMP")
+            jump_to_value = execution_list[i][jump_start_index + 5:]
+            new_jump_index = execution_list.index(jump_to_value+":")
+            first_comparator = variables_dict[execution_list[i][3:4]]
+
+            if execution_list[i][7:jump_start_index].strip() in variables_dict:
+                second_comparator = variables_dict[execution_list[i][7:jump_start_index].strip()]
+            else:
+                second_comparator = int(execution_list[i][7:jump_start_index])
+
+            if  special_function == "> ":
+                if first_comparator > second_comparator:
+                    i = new_jump_index
+            if special_function == "< ":
+                if first_comparator < second_comparator:
+                    i = new_jump_index
+            if special_function == "==":
+                if first_comparator == second_comparator:
+                    i = new_jump_index
+            if special_function == "!=":
+                if first_comparator != second_comparator:
+                    i = new_jump_index
+            if special_function == "<=":
+                if first_comparator <= second_comparator:
+                    i = new_jump_index
+            if special_function == ">=":
+                if first_comparator >= second_comparator:
+                    i = new_jump_index
+            pass
+
+        if execution_list[i][:3] == "END":
+            break
+        i+=1
+
+    return print_list
+
 
 if __name__ == "__main__":
-    program1 = []
-    program1.append("MOV A 1")
-    program1.append("MOV B 2")
-    program1.append("PRINT A")
-    program1.append("PRINT B")
-    program1.append("ADD A B")
-    program1.append("PRINT A")
-    program1.append("END")
-    result = run(program1)
-    print(result)
-
-    program2 = []
-    program2.append("MOV A 1")
-    program2.append("MOV B 10")
-    program2.append("begin:")
-    program2.append("IF A >= B JUMP quit")
-    program2.append("PRINT A")
-    program2.append("PRINT B")
-    program2.append("ADD A 1")
-    program2.append("SUB B 1")
-    program2.append("JUMP begin")
-    program2.append("quit:")
-    program2.append("END")
+    program2 = ['MOV N 100', 'PRINT 2', 'MOV A 3', 'start:', 'MOV B 2', 'MOV Z 0', 'test:', 'MOV C B', 'new:', 'IF C == A JUMP virhe', 'IF C > A JUMP pass_by', 'ADD C B', 'JUMP new', 'virhe:', 'MOV Z 1', 'JUMP pass_by2', 'pass_by:', 'ADD B 1', 'IF B < A JUMP test', 'pass_by2:', 'IF Z == 1 JUMP pass_by3', 'PRINT A', 'pass_by3:', 'ADD A 1', 'IF A <= N JUMP start']
     result = run(program2)
-    print(result)
-
-    program3 = []
-    program3.append("MOV A 1")
-    program3.append("MOV B 1")
-    program3.append("begin:")
-    program3.append("PRINT A")
-    program3.append("ADD B 1")
-    program3.append("MUL A B")
-    program3.append("IF B <= 10 JUMP begin")
-    program3.append("END")
-    result = run(program3)
-    print(result)
-
-    program4 = []
-    program4.append("MOV N 50")
-    program4.append("PRINT 2")
-    program4.append("MOV A 3")
-    program4.append("begin:")
-    program4.append("MOV B 2")
-    program4.append("MOV Z 0")
-    program4.append("test:")
-    program4.append("MOV C B")
-    program4.append("new:")
-    program4.append("IF C == A JUMP error")
-    program4.append("IF C > A JUMP over")
-    program4.append("ADD C B")
-    program4.append("JUMP new")
-    program4.append("error:")
-    program4.append("MOV Z 1")
-    program4.append("JUMP over2")
-    program4.append("over:")
-    program4.append("ADD B 1")
-    program4.append("IF B < A JUMP test")
-    program4.append("over2:")
-    program4.append("IF Z == 1 JUMP over3")
-    program4.append("PRINT A")
-    program4.append("over3:")
-    program4.append("ADD A 1")
-    program4.append("IF A <= N JUMP begin")
-    result = run(program4)
     print(result)
