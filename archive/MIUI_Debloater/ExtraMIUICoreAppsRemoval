@@ -1,0 +1,3 @@
+pause
+echo "THESE MIGHT BE APPS YOU WANT TO KEEP SO BE VERY VERY CAREFUL"
+adb shell pm uninstall -k --user 0 com.miui.notes
