@@ -79,22 +79,26 @@ class PaymentTerminal:
         return False
 
     def deposit_money_on_card(self, card: LunchCard, amount: float):
+        # The card owner pays this by cash, so the deposited sum is added to the funds available at the terminal.
+        self.funds += amount
+        card.balance+=amount
         pass
 
 if __name__ == "__main__":
     exactum = PaymentTerminal()
 
-    change = exactum.eat_lunch(10)
-    print("The change returned was", change)
-
-    card = LunchCard(7)
+    card = LunchCard(2)
+    print(f"Card balance is {card.balance} euros")
 
     result = exactum.eat_special_lunchcard(card)
     print("Payment successful:", result)
+
+    exactum.deposit_money_on_card(card, 100)
+    print(f"Card balance is {card.balance} euros")
+
     result = exactum.eat_special_lunchcard(card)
     print("Payment successful:", result)
-    result = exactum.eat_lunch_lunchcard(card)
-    print("Payment successful:", result)
+    print(f"Card balance is {card.balance} euros")
 
     print("Funds available at the terminal:", exactum.funds)
     print("Regular lunches sold:", exactum.lunches)
