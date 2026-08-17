@@ -1,5 +1,0 @@
-*.pyc
-*.toml
-__pycache__/
-test
-tmc
